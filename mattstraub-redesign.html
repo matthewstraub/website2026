@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matt Straub – Tech × People</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0b0f;
+    --bg-elevated: #141319;
+    --surface: #1c1b22;
+    --text-primary: #f0ede6;
+    --text-secondary: #8e8a9a;
+    --text-muted: #5a5668;
+    --accent: #c8ff3c;
+    --warm: #ff7a52;
+    --cool: #6e8cff;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--text-muted) transparent; }
+  body { background: var(--bg); color: var(--text-primary); font-family: var(--sans); font-weight: 300; line-height: 1.6; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(12,11,15,0.7); border-bottom: 1px solid rgba(255,255,255,0.04); animation: fadeDown 0.8s ease-out; }
+  .nav-logo { font-family: var(--serif); font-size: 1.35rem; color: var(--text-primary); text-decoration: none; letter-spacing: -0.02em; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-family: var(--mono); font-size: 0.72rem; font-weight: 300; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; transition: color 0.3s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
+  .nav-links a:hover { color: var(--text-primary); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 3rem 4rem; position: relative; overflow: hidden; }
+  .hero-bg-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(200,255,60,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(200,255,60,0.03) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%); }
+  .hero-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; animation: orbFloat 20s ease-in-out infinite; }
+  .hero-orb-1 { width: 500px; height: 500px; background: var(--accent); top: 10%; right: 10%; }
+  .hero-orb-2 { width: 400px; height: 400px; background: var(--cool); bottom: 10%; left: 5%; animation-delay: -7s; }
+  .hero-orb-3 { width: 300px; height: 300px; background: var(--warm); top: 50%; left: 40%; animation-delay: -14s; }
+  .hero-tag { font-family: var(--mono); font-size: 0.7rem; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; animation: fadeUp 0.8s ease-out 0.2s both; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(3.5rem, 8vw, 8rem); font-weight: 400; line-height: 0.95; letter-spacing: -0.03em; max-width: 900px; animation: fadeUp 0.8s ease-out 0.4s both; }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 1.15rem; color: var(--text-secondary); max-width: 520px; margin-top: 2rem; line-height: 1.7; animation: fadeUp 0.8s ease-out 0.6s both; }
+  .hero-cta-row { display: flex; gap: 1.5rem; margin-top: 3rem; animation: fadeUp 0.8s ease-out 0.8s both; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 100px; font-family: var(--mono); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.35s ease; cursor: pointer; border: none; }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-primary:hover { background: #d9ff6e; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,255,60,0.2); }
+  .btn-outline { background: transparent; color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.1); }
+  .btn-outline:hover { color: var(--text-primary); border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+  .hero-scroll-hint { position: absolute; bottom: 2.5rem; left: 3rem; display: flex; align-items: center; gap: 0.75rem; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); animation: fadeUp 0.8s ease-out 1.2s both; }
+  .scroll-line { width: 40px; height: 1px; background: var(--text-muted); position: relative; overflow: hidden; }
+  .scroll-line::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--accent); animation: scrollPulse 2s ease-in-out infinite; }
+
+  .section { padding: 8rem 3rem; position: relative; }
+  .section-label { font-family: var(--mono); font-size: 0.65rem; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3rem; display: flex; align-items: center; gap: 1rem; }
+  .section-label::before { content: ''; width: 30px; height: 1px; background: var(--text-muted); }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; max-width: 1200px; align-items: start; }
+  .about-portrait { position: relative; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; background: var(--surface); }
+  .about-portrait-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, var(--surface) 0%, #252330 50%, var(--surface) 100%); display: flex; align-items: center; justify-content: center; }
+  .about-portrait-placeholder span { font-family: var(--serif); font-size: 6rem; color: var(--text-muted); opacity: 0.3; }
+  .about-portrait-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(12,11,15,0.6) 100%); }
+  .about-portrait-tag { position: absolute; bottom: 1.5rem; left: 1.5rem; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); background: rgba(12,11,15,0.6); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 100px; border: 1px solid rgba(255,255,255,0.08); }
+  .about-text h2 { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 2rem; }
+  .about-text h2 em { color: var(--warm); font-style: italic; }
+  .about-text p { color: var(--text-secondary); font-size: 1rem; line-height: 1.8; margin-bottom: 1.5rem; }
+  .about-detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.06); }
+  .about-detail { display: flex; flex-direction: column; gap: 0.25rem; }
+  .about-detail-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+  .about-detail-value { font-family: var(--serif); font-size: 1.15rem; color: var(--text-primary); }
+
+  .expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1200px; }
+  .expertise-card { background: var(--bg-elevated); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 2.5rem; transition: all 0.4s ease; position: relative; overflow: hidden; }
+  .expertise-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.4s ease; }
+  .expertise-card:hover { border-color: rgba(200,255,60,0.15); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .expertise-card:hover::before { opacity: 1; }
+  .expertise-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.5rem; }
+  .expertise-card:nth-child(1) .expertise-icon { background: rgba(200,255,60,0.1); }
+  .expertise-card:nth-child(2) .expertise-icon { background: rgba(255,122,82,0.1); }
+  .expertise-card:nth-child(3) .expertise-icon { background: rgba(110,140,255,0.1); }
+  .expertise-card h3 { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.75rem; }
+  .expertise-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+  .project-section { background: var(--bg-elevated); border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .project-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; max-width: 1200px; align-items: center; }
+  .project-visual { position: relative; aspect-ratio: 16/10; border-radius: 20px; overflow: hidden; background: var(--surface); display: flex; align-items: center; justify-content: center; }
+  .sound-wave { display: flex; align-items: center; gap: 4px; height: 120px; }
+  .sound-bar { width: 4px; border-radius: 4px; background: var(--accent); animation: soundWave 1.8s ease-in-out infinite; }
+  .sound-bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+  .sound-bar:nth-child(2) { height: 60%; animation-delay: 0.1s; }
+  .sound-bar:nth-child(3) { height: 90%; animation-delay: 0.2s; }
+  .sound-bar:nth-child(4) { height: 50%; animation-delay: 0.3s; }
+  .sound-bar:nth-child(5) { height: 80%; animation-delay: 0.4s; }
+  .sound-bar:nth-child(6) { height: 40%; animation-delay: 0.5s; }
+  .sound-bar:nth-child(7) { height: 95%; animation-delay: 0.6s; }
+  .sound-bar:nth-child(8) { height: 55%; animation-delay: 0.7s; }
+  .sound-bar:nth-child(9) { height: 70%; animation-delay: 0.8s; }
+  .sound-bar:nth-child(10) { height: 35%; animation-delay: 0.9s; }
+  .sound-bar:nth-child(11) { height: 85%; animation-delay: 1.0s; }
+  .sound-bar:nth-child(12) { height: 45%; animation-delay: 1.1s; }
+  .sound-bar:nth-child(13) { height: 75%; animation-delay: 1.2s; }
+  .sound-bar:nth-child(14) { height: 25%; animation-delay: 1.3s; }
+  .sound-bar:nth-child(15) { height: 65%; animation-delay: 1.4s; }
+  .project-visual-label { position: absolute; top: 1.5rem; left: 1.5rem; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); background: rgba(12,11,15,0.6); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 100px; border: 1px solid rgba(255,255,255,0.06); }
+  .project-info h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .project-info h2 em { font-style: italic; color: var(--cool); }
+  .project-info p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+  .project-tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.08); padding: 0.45rem 1rem; border-radius: 100px; }
+
+  .passions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; max-width: 1200px; }
+  .passion-card { background: var(--bg-elevated); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.35s ease; }
+  .passion-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.1); }
+  .passion-emoji { font-size: 2rem; margin-bottom: 1rem; display: block; }
+  .passion-card h4 { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .passion-card p { color: var(--text-muted); font-size: 0.8rem; line-height: 1.6; }
+
+  .contact-section { text-align: center; padding: 10rem 3rem 6rem; }
+  .contact-section h2 { font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  .contact-section h2 em { font-style: italic; color: var(--accent); }
+  .contact-section p { color: var(--text-secondary); font-size: 1rem; max-width: 440px; margin: 0 auto 3rem; line-height: 1.7; }
+  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  footer { padding: 3rem; border-top: 1px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; align-items: center; }
+  .footer-left { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-muted); }
+  .footer-right { display: flex; gap: 2rem; }
+  .footer-right a { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+  .footer-right a:hover { color: var(--text-secondary); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes orbFloat { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-40px) scale(1.05); } 66% { transform: translate(-20px,25px) scale(0.95); } }
+  @keyframes scrollPulse { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
+  @keyframes soundWave { 0%, 100% { transform: scaleY(0.4); opacity: 0.4; } 50% { transform: scaleY(1); opacity: 1; } }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .section { padding: 5rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .expertise-grid { grid-template-columns: 1fr; }
+    .project-layout { grid-template-columns: 1fr; gap: 3rem; }
+    .passions-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+  @media (max-width: 550px) {
+    .nav-links { display: none; }
+    .passions-grid { grid-template-columns: 1fr; }
+    .about-detail-row { grid-template-columns: 1fr; }
+    .contact-section { padding: 6rem 1.5rem 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">matt<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#expertise">What I Do</a></li>
+    <li><a href="#project">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-tag">Customer Success Manager &mdash; Meta</div>
+  <h1>Where <em>technology</em> meets the <em>human</em> experience</h1>
+  <p class="hero-sub">Building bridges between people and products. Crafting seamless experiences through creative problem-solving, empathy, and a relentless curiosity for what's next.</p>
+  <div class="hero-cta-row">
+    <a href="#contact" class="btn btn-primary">Get in Touch &rarr;</a>
+    <a href="#project" class="btn btn-outline">View Work</a>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="section-label">About</div>
+  <div class="about-grid reveal">
+    <div class="about-portrait">
+      <div class="about-portrait-placeholder"><span>MS</span></div>
+      <div class="about-portrait-overlay"></div>
+      <div class="about-portrait-tag">NYC Based</div>
+    </div>
+    <div class="about-text">
+      <h2>Obsessed with the intersection of <em>tech &amp; people</em></h2>
+      <p>I'm a New York City-based Customer Success Manager at Meta with a passion for entrepreneurship, creativity, and problem-solving in the ever-changing landscape of AI and technology.</p>
+      <p>My background is anything but traditional &mdash; I created my own B.A. in Interdisciplinary Studies with a concentration in Critical Sound Design at Marymount Manhattan College, blending audio, music, and a strong liberal arts foundation into something uniquely my own.</p>
+      <p>Originally from a small town in Northeastern Pennsylvania, I bring small-town curiosity to big-city problems &mdash; always looking for the creative angle that others might miss.</p>
+      <div class="about-detail-row">
+        <div class="about-detail"><span class="about-detail-label">Based In</span><span class="about-detail-value">New York City</span></div>
+        <div class="about-detail"><span class="about-detail-label">Currently</span><span class="about-detail-value">CSM at Meta</span></div>
+        <div class="about-detail"><span class="about-detail-label">Education</span><span class="about-detail-value">Marymount Manhattan</span></div>
+        <div class="about-detail"><span class="about-detail-label">Focus</span><span class="about-detail-value">Critical Sound Design</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="expertise">
+  <div class="section-label">What I Do</div>
+  <div class="expertise-grid">
+    <div class="expertise-card reveal">
+      <div class="expertise-icon">&#9889;</div>
+      <h3>Customer Success</h3>
+      <p>Driving value at the intersection of product and people. I work with teams to ensure technology delivers real outcomes &mdash; not just features, but solutions that resonate.</p>
+    </div>
+    <div class="expertise-card reveal">
+      <div class="expertise-icon">&#127912;</div>
+      <h3>Creative Problem Solving</h3>
+      <p>From sound installations to product strategy, I approach every challenge with a creative lens. My nontraditional background is my superpower for finding unconventional solutions.</p>
+    </div>
+    <div class="expertise-card reveal">
+      <div class="expertise-icon">&#128300;</div>
+      <h3>Digital Preservation</h3>
+      <p>Passionate about preserving family history through technology &mdash; digitizing video, audio, and photographs so that future generations can experience the past in accessible ways.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section project-section" id="project">
+  <div class="section-label">Featured Project</div>
+  <div class="project-layout reveal">
+    <div class="project-visual">
+      <div class="project-visual-label">Immersive Installation</div>
+      <div class="sound-wave">
+        <div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div>
+      </div>
+    </div>
+    <div class="project-info">
+      <h2><em>re</em>member</h2>
+      <p>An immersive audio installation that presents an abstract simulation of dementia, using sound to pull participants into a forgetful world. Inspired by encounters with his grandmother experiencing dementia, the piece combines recorded family conversations with ambient recordings of elder care facilities and live cello.</p>
+      <p>Created as the culmination of studies at Marymount Manhattan College &mdash; a deeply personal work that bridges art, empathy, and technology.</p>
+      <div class="project-tags">
+        <span class="project-tag">Sound Design</span>
+        <span class="project-tag">Installation Art</span>
+        <span class="project-tag">Immersive Audio</span>
+        <span class="project-tag">Spatial Sound</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="passions">
+  <div class="section-label">Beyond Work</div>
+  <div class="passions-grid">
+    <div class="passion-card reveal"><span class="passion-emoji">&#127908;</span><h4>Audio &amp; Sound</h4><p>Lifelong passion for audio engineering and sound design</p></div>
+    <div class="passion-card reveal"><span class="passion-emoji">&#128252;</span><h4>Family Archives</h4><p>Digitizing decades of family memories for preservation</p></div>
+    <div class="passion-card reveal"><span class="passion-emoji">&#127956;</span><h4>Hometown Roots</h4><p>Exploring the history of Northeastern PA and family heritage</p></div>
+    <div class="passion-card reveal"><span class="passion-emoji">&#129359;</span><h4>Disc Golf</h4><p>Finding balance and focus on the course</p></div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <h2 class="reveal">Let's build<br>something <em>together</em></h2>
+  <p class="reveal">Whether it's a creative collaboration, a professional opportunity, or just a good conversation &mdash; I'd love to connect.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:hello@mattstraub.com" class="btn btn-primary">Say Hello &rarr;</a>
+    <a href="#" class="btn btn-outline">LinkedIn</a>
+    <a href="#" class="btn btn-outline">Send Files</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">&copy; 2026 Matt Straub &middot; NYC</div>
+  <div class="footer-right">
+    <a href="#">LinkedIn</a>
+    <a href="#">Email</a>
+    <a href="#">Dropbox</a>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => { entry.target.classList.add('visible'); }, i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
